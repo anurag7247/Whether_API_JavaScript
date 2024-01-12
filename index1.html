@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/quartz/bootstrap.min.css">
+    <title>Document</title>
+    <style>
+      .bg-opacity {
+        background: rgba(3, 9, 3, 0.27);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 10px;
+}
+        .searchBox1 {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2f3640;
+            border-radius: 27px;
+            padding: 7px;
+        }
+
+        .searchBox1:hover > .searchInput1 {
+            width: 240px;
+            padding: 0 6px;
+        }
+
+        .searchBox1:hover > .searchButton1 {
+            background: white;
+            color: #2f3640;
+        }
+
+        .searchButton1 {
+            color: white;
+            float: right;
+            width: 47px;
+            height: 44px;
+            border-radius: 50%;
+            background: #2f3640;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.4s;
+        }
+
+        .searchInput1 {
+            border: none;
+            background: none;
+            outline: none;
+            float: left;
+            padding: 0;
+            color: white;
+            font-size: 16px;
+            transition: 0.4s;
+            line-height: 45px;
+            width: 0px;
+        }
+
+        @media screen and (max-width: 620px) {
+            .searchBox1:hover > .searchInput1 {
+                width: calc(100% - 70px); /* Adjust the width to your preference */
+                padding: 0 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-3">
+                <div class="searchBox1">
+                    <input class="searchInput1" type="text" name="" placeholder="Search">
+                    <button class="searchButton1">
+                        <i>search</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="outPut" style="margin-top: 100px; display: none;"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script>
+      var c=0;
+        $(".searchButton1").click((e) => {
+          if (c=0) {
+            Api(); 
+            setTimeout(() => {
+              $("#outPut").slideDown(1500);
+            },500);
+            c++;
+          }
+          else {
+            $("#outPut").slideUp(700);
+            Api(); 
+            setTimeout(() => {
+              $("#outPut").slideDown(1500);
+            },500);
+          }
+          
+          
+
+        });
+        
+        function Api() {
+          $.get(`http://api.weatherapi.com/v1/current.json?key=d384dff0c77c4b33963131810241001&q=${$(".searchInput1").val()}`, function (data, status) {
+              const cityName = data.location.name;
+                const icons = data.current.condition.icon;
+                const weather = data.current.condition.text;
+                const temp = data.current.temp_c;
+                const humi= data.current.humidity;
+                const feellike=data.current.feelslike_c;
+                const wind=data.current.wind_kph;
+               
+                const cardHtml = `
+                    <div class="col-12 col-md-4 offset-md-4">
+                        <div class="card border-danger mb-3">
+                            <div class="card-header text-center"><h2>Current weather<img src="weather-app.png" style="height:40px; width:40px;"/></h2></div>
+                            <div class="card-body">
+                                <div class="w-25 bg-opacity">
+                                  
+                                          <div class="text-center">
+                                          <img src="${icons}">${weather}
+                                          </div>
+                                </div><br/>
+                                <div class="w-25 bg-opacity text-center">
+                                    <h2>${temp}°C</h2>
+                                    <p>Feels like<br/> ${feellike}°C</p>
+                                </div>
+                                <div class="w-100 bg-opacity text-center">
+                                  <div class="row">
+                                    <div class="col-4">
+                                      <p>City<img src="cityscape.png" style="height:25px; width:25px;"/><br/>${cityName}</p>
+                                    </div>
+                                    <div class="col-4">
+                                      <p>Humidity<img src="air.png" style="height:25px; width:25px;"/><br/>${humi}%</p>
+                                    </div>
+                                    <div class="col-4">
+                                      <p>Wind<img src="wind.png" style="height:25px; width:25px;"/><br/>${wind}km/h</p>
+                                    </div>
+                                    
+
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                $("#outPut").html(cardHtml);  
+           
+
+            });          
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/fontawesome.min.css">
+
+    <style>
+   
+    </style>
+    
+  </head>
+  <body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <input type="text" class="form-control my-3" id="cityName">
+                <button class="btn btn-primary" id="getweatherName">Weather</button>
+            </div>
+            <div class="col-8">
+                
+            </div>
+        </div>
+
+    </div>
+
+
+
+    
+   
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+      $("#getweatherName").click((e)=>{
+        $.get(`https://api.openweathermap.org/data/2.5/weather?q=${$("#cityName").val()}&appid=6bcf6c9630948de1fc78a46cd3afc611&units=metric`, function (data, status) {
+        console.log(data.weather[0].description);
+        console.log(data.main.temp_min);
+        console.log(data.main.humidity);
+        console.log(data.wind.speed);
+        var weather = data.weather[0].description;
+        console.log(status);
+      $("#outPut").html(data.weather[0].description);
+      if(weather=='fog')
+      {
+        $("#haze").html(`<img src="icons8-fog.gif" style="width: 40px; height: 40px;">`);
+      }
+    });
+      })
+    </script>
+  </body>
+</html>
